@@ -25,6 +25,7 @@ transform = transforms.Compose([
 image_folder = "/home/arpit/rf_detr/split_dataset/test/"
 output_folder = "/home/arpit/rf_detr/split_dataset/predictions/"
 csv_filename = "valid_box_counts_with_categories.csv"
+confidence_threshold = 0.5
 
 os.makedirs(output_folder, exist_ok=True)  # Create output folder if not exists
 
@@ -59,7 +60,7 @@ def process_image(image_path, file_name):
     print(class_probs)
     scores, labels = class_probs.max(dim=-1)
 
-    confidence_threshold = 0.85
+    confidence_threshold = confidence_threshold
     confident_indices = scores > confidence_threshold
 
     boxes = boxes[confident_indices].cpu().numpy()
@@ -78,17 +79,17 @@ def process_image(image_path, file_name):
     
     if len(boxes) > 0:  
         for box, score, label in zip(boxes, scores, labels):
-            if label == 0:  
-                x_min, y_min, x_max, y_max = box
-                x_min_scaled = x_min * orig_w
-                y_min_scaled = y_min * orig_h
-                x_max_scaled = x_max * orig_w
-                y_max_scaled = y_max * orig_h
+            # if label == 0:  
+            x_min, y_min, x_max, y_max = box
+            x_min_scaled = x_min * orig_w
+            y_min_scaled = y_min * orig_h
+            x_max_scaled = x_max * orig_w
+            y_max_scaled = y_max * orig_h
 
-                draw.rectangle([x_min_scaled, y_min_scaled, x_max_scaled, y_max_scaled], outline="red", width=2)
-                draw.text((x_min_scaled, y_min_scaled), f"{label}: {score:.2f}", fill="red")
+            draw.rectangle([x_min_scaled, y_min_scaled, x_max_scaled, y_max_scaled], outline="red", width=2)
+            draw.text((x_min_scaled, y_min_scaled), f"{label}: {score:.2f}", fill="red")
 
-                category_counts[label] = category_counts.get(label, 0) + 1
+            category_counts[label] = category_counts.get(label, 0) + 1
 
         output_path = os.path.join(output_folder, file_name)
         image.save(output_path)

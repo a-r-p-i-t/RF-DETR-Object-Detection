@@ -29,6 +29,7 @@ image_folder = "/home/arpit/rf_detr/split_dataset/test/"
 output_folder = "/home/arpit/rf_detr/split_dataset/predictions/"
 csv_filename = "valid_box_counts_with_categories.csv"
 gt_csv = "box_counts_with_categories_human.csv"
+confidence_threshold = 0.5
 
 os.makedirs(output_folder, exist_ok=True)
 image_paths = [os.path.join(image_folder, f) for f in os.listdir(image_folder) if f.endswith((".jpg", ".png"))]
@@ -59,7 +60,7 @@ def process_image(image_path, file_name):
     class_probs = torch.nn.functional.softmax(class_logits[:, :, 1:], dim=-1)
     scores, labels = class_probs.max(dim=-1)
 
-    confidence_threshold = 0.5
+    confidence_threshold = confidence_threshold
     confident_indices = scores > confidence_threshold
 
     boxes = boxes[confident_indices].cpu().numpy()

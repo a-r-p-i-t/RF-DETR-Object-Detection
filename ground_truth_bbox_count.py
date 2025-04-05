@@ -5,6 +5,7 @@ import json
 import csv
 from collections import defaultdict
 
+csv_filename = "box_counts_with_categories_human.csv"
 # Load your JSON data
 with open("/home/arpit/rf_detr/split_dataset/test/_annotations.coco.json", "r") as file:
     data = json.load(file)
@@ -41,7 +42,6 @@ for img_id in all_image_ids:
     csv_data.append(row)
 
 # Save to CSV
-csv_filename = "box_counts_with_categories_human.csv"
 with open(csv_filename, "w", newline="") as csvfile:
     writer = csv.writer(csvfile)
     writer.writerows(csv_data)
