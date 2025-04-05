@@ -23,7 +23,7 @@ Implementing Custom Object Detection Model (Training and Infernence) using RF-DE
 
 ## Installation
 
-1. **Pip install the rfdetr package in a Python>=3.9 environment.:**
+1. **Pip install the rfdetr package in a Python=3.10 environment.:**
 
    ```bash
    Pip install the rfdetr
