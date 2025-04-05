@@ -11,11 +11,11 @@ This project impements the RF-Detr Model for Training Custom Object Detection Mo
 - [Data Description](#data-description)
 - [Fine-Tuning](#fine-tuning)
 - [Early Stopping](#early-stopping)
-- [Logging with TensorBoard](#logging-with-tensorBoard)
+- [Logging with TensorBoard](#logging-with-tensorboard)
 - [Logging with Weights and Biases](#logging-with-weights-and-biases)
 - [Load and run fine-tuned model](#load-and-run-fine-tuned-model)
-- [ONNX Expor](#onnx-export)
-- [BenchMarking (With MLFlow Integration)](#benchmarking-(with-mlflow-integration))
+- [ONNX Export](#onnx-export)
+- [BenchMarking (With MLFlow Integration)](#benchmarking-with-mlflow-integration)
 
 
 ## Objective
@@ -27,14 +27,14 @@ Implementing Custom Object Detection Model (Training and Infernence) using RF-DE
 
    ```bash
    Pip install the rfdetr
-
+   ```
 
 2. **Additional Installation:**
 
     ```bash
     pip install git+https://github.com/roboflow/rf-detr.git
+    ```
     
-
 
 ## Data Description
 
@@ -67,7 +67,6 @@ from rfdetr import RFDETRBase
 model = RFDETRBase()
 
 model.train(dataset_dir=<DATASET_PATH>, epochs=10, batch_size=4, grad_accum_steps=4, lr=1e-4, output_dir=<OUTPUT_PATH>)
-
 ```
 **More Parameters**
 ![Screenshot 2025-04-05 193856](https://github.com/user-attachments/assets/ef8f9a7b-742c-4f83-8887-00eba92bd7d2)
@@ -83,7 +82,6 @@ from rfdetr import RFDETRBase
 model = RFDETRBase()
 
 model.train(dataset_dir=<DATASET_PATH>, epochs=10, batch_size=4, grad_accum_steps=4, lr=1e-4, output_dir=<OUTPUT_PATH>, resume=<CHECKPOINT_PATH>)
-
  ```
 ## Early Stopping
 Early stopping monitors validation mAP and halts training if improvements remain below a threshold for a set number of epochs. This can reduce wasted computation once the model converges. Additional parameters—such as early_stopping_patience, early_stopping_min_delta, and early_stopping_use_ema—let you fine-tune the stopping behavior
@@ -93,7 +91,6 @@ from rfdetr import RFDETRBase
 model = RFDETRBase()
 
 model.train(dataset_dir=<DATASET_PATH>, epochs=10, batch_size=4, grad_accum_steps=4, lr=1e-4, output_dir=<OUTPUT_PATH>, early_stopping=True)
-
 ```
 **Result Checkpoints**
 During training, two model checkpoints (the regular weights and an EMA-based set of weights) will be saved in the specified output directory. The EMA (Exponential Moving Average) file is a smoothed version of the model’s weights over time, often yielding better stability and generalization.
