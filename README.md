@@ -69,9 +69,31 @@ model = RFDETRBase()
 model.train(dataset_dir=<DATASET_PATH>, epochs=10, batch_size=4, grad_accum_steps=4, lr=1e-4, output_dir=<OUTPUT_PATH>)
 ```
 **More Parameters**
-![Screenshot 2025-04-05 193856](https://github.com/user-attachments/assets/ef8f9a7b-742c-4f83-8887-00eba92bd7d2)
+| **Parameter**               | **Description**                                                                                                                                                      |
+|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `dataset_dir`               | Specifies the COCO-formatted dataset location with train, valid, and test folders, each containing `_annotations.coco.json`. Ensures the model can properly read and parse data. |
+| `output_dir`                | Directory where training artifacts (checkpoints, logs, etc.) are saved. Important for experiment tracking and resuming training.                                      |
+| `epochs`                    | Number of full passes over the dataset. Increasing this can improve performance but extends total training time.                                                       |
+| `batch_size`                | Number of samples processed per iteration. Higher values require more GPU memory but can speed up training. Must be balanced with `grad_accum_steps` to maintain the intended total batch size. |
+| `grad_accum_steps`          | Accumulates gradients over multiple mini-batches, effectively raising the total batch size without requiring as much memory at once. Helps train on smaller GPUs at the cost of slightly more time per update. |
+| `lr`                        | Learning rate for most parts of the model. Influences how quickly or cautiously the model adjusts its parameters.                                                     |
+| `lr_encoder`                | Learning rate specifically for the encoder portion of the model. Useful for fine-tuning encoder layers at a different pace.                                           |
+| `resolution`                | Sets the input image dimensions. Higher values can improve accuracy but require more memory and can slow training. Must be divisible by 56.                          |
+| `weight_decay`              | Coefficient for L2 regularization. Helps prevent overfitting by penalizing large weights, often improving generalization.                                              |
+| `device`                    | Specifies the hardware (e.g., cpu or cuda) to run training on. GPU significantly speeds up training.                                                                 |
+| `use_ema`                   | Enables Exponential Moving Average of weights, producing a smoothed checkpoint. Often improves final performance with slight overhead.                                |
+| `gradient_checkpointing`    | Re-computes parts of the forward pass during backpropagation to reduce memory usage. Lowers memory needs but increases training time.                                 |
+| `checkpoint_interval`       | Frequency (in epochs) at which model checkpoints are saved. More frequent saves provide better coverage but consume more storage.                                     |
+| `resume`                    | Path to a saved checkpoint for continuing training. Restores both model weights and optimizer state.                                                                 |
+| `tensorboard`               | Enables logging of training metrics to TensorBoard for monitoring progress and performance.                                                                          |
+| `wandb`                     | Activates logging to Weights & Biases, facilitating cloud-based experiment tracking and visualization.                                                               |
+| `project`                   | Project name for Weights & Biases logging. Groups multiple runs under a single heading.                                                                              |
+| `run`                       | Run name for Weights & Biases logging, helping differentiate individual training sessions within a project.                                                            |
+| `early_stopping`            | Enables an early stopping callback that monitors mAP improvements to decide if training should be stopped. Helps avoid needless epochs when mAP plateaus.              |
+| `early_stopping_patience`   | Number of consecutive epochs without mAP improvement before stopping. Prevents wasting resources on minimal gains.                                                     |
+| `early_stopping_min_delta`  | Minimum change in mAP to qualify as an improvement. Ensures that trivial gains don’t reset the early stopping counter.                                                 |
+| `early_stopping_use_ema`    | Whether to track improvements using the EMA version of the model. Uses EMA metrics if available, otherwise falls back to regular mAP.                               |
 
-![Screenshot 2025-04-05 193912](https://github.com/user-attachments/assets/a278cf79-8d8a-4ab3-b271-e0c17bd975c1)
 
 ## Resume Training
 You can resume training from a previously saved checkpoint by passing the path to the checkpoint.pth file using the resume argument. This is useful when training is interrupted or you want to continue fine-tuning an already partially trained model. The training loop will automatically load the weights and optimizer state from the provided checkpoint file.
