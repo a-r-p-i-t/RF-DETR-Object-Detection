@@ -213,12 +213,12 @@ pip install mlflow
 
 **Generating Ground Truth Category wise bbox count**
 
-Run the script **[ground_truth_bbox_count.py](.ground_truth_bbox_count.py)** to get Ground truth csv file containing category wise bbox count
+Run the script **[ground_truth_bbox_count.py](./ground_truth_bbox_count.py)** to get Ground truth csv file containing category wise bbox count
 
-Required Parameters:
+**Required Parameters:**
 
-1. Test Json (__annotations.coco.json)
-2. Csv file name where you want to have the category wise bbox count data appended.
+1. <test_json_path> (__annotations.coco.json)
+2. <csv_file_path> where you want to have the category wise bbox count data appended.
 
 **MLFlow Integrated Evaluation Metrics with prediction results**
 
@@ -229,13 +229,13 @@ Run the script **[inf_with_mlflow.py](./inf_with_mlflow.py)** to get
 3. Average Fps of processing of frames by the model
 4. ML flow integrated logs saved in mlruns folder, containing the accurcy metrics
 
-Required Parameters:
+**Required Parameters:**
 
-1. Test Folder Path
-2. Saved_Dir Path, where you want to sve the model predictions
-3. Csv file name where the category wise box counts info will be appended.
-4. Confidence threshold for model
-5. Ground Truth Csv containing category-wise bbox-count
+1. <test_folder_path>
+2. <saved_dir_path> where you want to sve the model predictions
+3. <csv_file_path> where the category wise box counts info will be appended.
+4. <confidence_threshold> for model
+5. <ground_truth_csv_path> containing category-wise bbox-count
 
    
 
