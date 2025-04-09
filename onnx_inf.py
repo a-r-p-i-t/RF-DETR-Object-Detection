@@ -9,7 +9,7 @@ import time
 device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
-onnx_model_path = "inference_model_fp16.onnx"
+onnx_model_path = "inference_model.onnx"
 ort_session = ort.InferenceSession(onnx_model_path, providers=["CUDAExecutionProvider"])
 
 providers = ort.get_available_providers()
@@ -33,13 +33,14 @@ image_fps = []
 
 for image_path in image_paths:
     print(f"Processing: {image_path}")
+    category_counts = {}
 
     # Load image
     image = Image.open(image_path).convert("RGB")
+    start_time = time.time()
     orig_w, orig_h = image.size
     image_tensor = transform(image).unsqueeze(0).to(device)
 
-    start_time = time.time()
     input_name = ort_session.get_inputs()[0].name
     ort_inputs = {input_name: image_tensor.cpu().numpy().astype(np.float32)}
 
@@ -50,6 +51,8 @@ for image_path in image_paths:
     
     fps = 1 / processing_time if processing_time > 0 else 0
     image_fps.append(fps)
+    
+    print(fps)
 
     boxes = torch.tensor(ort_outputs[0], device=device)  # (1, 300, 4)
     class_logits = torch.tensor(ort_outputs[1], device=device)
@@ -92,6 +95,7 @@ for image_path in image_paths:
 
         output_path = os.path.join(output_folder, os.path.basename(image_path))
         image.save(output_path)
+        file_name = os.path.basename(image_path)
         image_category_counts[file_name] = category_counts
         print(f"Saved: {output_path}")
     else:

@@ -11,7 +11,7 @@ device = "cuda" if torch.cuda.is_available() else "cpu"
 print(f"Using device: {device}")
 
 onnx_model_path = "inference_model.onnx"
-ort_session = ort.InferenceSession(onnx_model_path, providers=["CUDAExecutionProvider"])
+ort_session = ort.InferenceSession(onnx_model_path, providers=["CudaExecutionProvider"])
 
 providers = ort.get_available_providers()
 print("Available providers:", providers)

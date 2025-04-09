@@ -4,7 +4,7 @@ from rfdetr import RFDETRBase
 from PIL import Image, ImageDraw
 import time
 # Initialize model
-model = RFDETRBase()
+model = RFDETRBase(device="cuda")
 
 # Paths
 folder_path = "/home/arpit/rf_detr/split_dataset/test"  # Folder containing images
